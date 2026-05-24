@@ -24,7 +24,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -32,18 +32,24 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	// Player movement and interaction functions 
+
+	// Moves the player forward and backward based on input.
 	UFUNCTION()
 	void MoveForward(float axisValue);
 
+	// Moves the player left and right based on input.
 	UFUNCTION()
 	void MoveRight(float axisValue);
 
+	// Starts the player jump.
 	UFUNCTION()
 	void StartJump();
 
+	// Stops the player jump.
 	UFUNCTION()
 	void StopJump();
 
+	// Checks what object the player is looking at and handles interaction.
 	UFUNCTION()
 	void FindObject();
 
@@ -108,39 +114,31 @@ public:
 	UFUNCTION()
 	void GiveResource(float amount, FString resourceType);
 
+	// Stores how many building pieces the player has available to place.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Supplies")
 	TArray<int> BuildingArray;
 
+	// Tracks whether the player is currently placing a building part.
 	UPROPERTY()
 	bool isBuilding;
 
+	// Stores the building part Blueprint class that will be spawned.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TSubclassOf<ABuildingPart> BuildPartClass;
 
+	// Stores a reference to the building part currently being placed.
 	UPROPERTY()
 	ABuildingPart* spawnedPart;
 
-	//UFUNCTION(BlueprintCallable)
-	//void SetHealth(float amount);
-
-	//UFUNCTION(BlueprintCallable)
-	//void SetHunger(float amount);
-
-	//UFUNCTION(BlueprintCallable)
-	//void SetStamina(float amount);
-
-	//UFUNCTION()
-	//void DecreaseStats();
-
-	//UFUNCTION()
-	//void GiveResource(float amount, FString resourceType);
-
+	// Updates the player's resources when crafting a building object.
 	UFUNCTION(BlueprintCallable)
 	void UpdateResources(float woodAmount, float stoneAmount, FString buildingObject);
 
+	// Spawns the selected building part and reports whether it was successful.
 	UFUNCTION(BlueprintCallable)
 	void SpawnBuilding(int buildingID, bool& isSuccess);
 
+	// Rotates the currently spawned building part while it is being placed.
 	UFUNCTION()
 	void RotateBuilding();
 };

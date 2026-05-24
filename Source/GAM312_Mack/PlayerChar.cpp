@@ -6,7 +6,7 @@
 // Sets default values
 APlayerChar::APlayerChar()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Iniital setup of camera component
@@ -28,9 +28,6 @@ APlayerChar::APlayerChar()
 	ResourcesNameArray.Add(TEXT("Wood"));
 	ResourcesNameArray.Add(TEXT("Stone"));
 	ResourcesNameArray.Add(TEXT("Berry"));
-
-
-
 }
 
 // Called when the game starts or when spawned
@@ -50,13 +47,22 @@ void APlayerChar::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// Checks if the player is currently placing a building part.
 	if (isBuilding)
 	{
+		// Makes sure there is a spawned building part before trying to move it.
 		if (spawnedPart)
 		{
+			// Gets the current location of the player's camera.
 			FVector StartLocation = PlayerCamComp->GetComponentLocation();
+
+			// Gets the forward direction from the camera and extends it 400 units outward.
 			FVector Direction = PlayerCamComp->GetForwardVector() * 400.0f;
+
+			// Calculates the final location in front of the player.
 			FVector EndLocation = StartLocation + Direction;
+
+			// Moves the building part so it stays in front of the player while being placed.
 			spawnedPart->SetActorLocation(EndLocation);
 		}
 	}
@@ -91,14 +97,20 @@ void APlayerChar::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 // Moves char forward and backwards
 void APlayerChar::MoveForward(float axisValue)
 {
+	// Gets the forward direction based on the player's controller rotation.
 	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
+
+	// Applies movement input forward or backward depending on the axis value.
 	AddMovementInput(Direction, axisValue);
 }
 
 // Moves char left and right
 void APlayerChar::MoveRight(float axisValue)
 {
+	// Gets the right direction based on the player's controller rotation.
 	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
+
+	// Applies movement input left or right depending on the axis value.
 	AddMovementInput(Direction, axisValue);
 }
 
@@ -135,8 +147,7 @@ void APlayerChar::FindObject()
 	QueryParams.bTraceComplex = true;
 	QueryParams.bReturnFaceIndex = true;
 
-
-
+	// If the player is not building, interact will look for resources.
 	if (!isBuilding) {
 		// Runs line trace.
 		if (GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECC_Visibility, QueryParams))
@@ -186,7 +197,9 @@ void APlayerChar::FindObject()
 	}
 	else
 	{
+		// Turns off building mode when the player confirms placement.
 		isBuilding = false;
+
 		//objectsBuilt = objectsBuilt + 1.0f;
 
 		//objWidget->UpdatebuildObj(objectsBuilt);
@@ -266,23 +279,31 @@ void APlayerChar::GiveResource(float amount, FString resourceType)
 
 void APlayerChar::UpdateResources(float woodAmount, float stoneAmount, FString buildingObject)
 {
+	// Checks if the player has enough wood for the selected building object.
 	if (woodAmount <= ResourcesArray[0])
 	{
+		// Checks if the player has enough stone for the selected building object.
 		if (stoneAmount <= ResourcesArray[1])
 		{
+			// Subtracts the required wood from the player's resource inventory.
 			ResourcesArray[0] = ResourcesArray[0] - woodAmount;
+
+			// Subtracts the required stone from the player's resource inventory.
 			ResourcesArray[1] = ResourcesArray[1] - stoneAmount;
 
+			// Adds one wall piece to the player's building inventory.
 			if (buildingObject == "Wall")
 			{
 				BuildingArray[0] = BuildingArray[0] + 1;
 			}
 
+			// Adds one floor piece to the player's building inventory.
 			if (buildingObject == "Floor")
 			{
 				BuildingArray[1] = BuildingArray[1] + 1;
 			}
 
+			// Adds one ceiling piece to the player's building inventory.
 			if (buildingObject == "Ceiling")
 			{
 				BuildingArray[2] = BuildingArray[2] + 1;
@@ -293,32 +314,58 @@ void APlayerChar::UpdateResources(float woodAmount, float stoneAmount, FString b
 
 void APlayerChar::SpawnBuilding(int buildingID, bool& isSuccess)
 {
+	// Only allows a new building part to spawn if the player is not already placing one.
 	if (!isBuilding)
 	{
+		// Checks if the player has at least one of the selected building parts available.
 		if (BuildingArray[buildingID] >= 1)
 		{
+			// Turns on building mode so the spawned part can follow the player's camera.
 			isBuilding = true;
+
+			// Stores spawn settings for the building part.
 			FActorSpawnParameters SpawnParams;
+
+			// Gets the current location of the player's camera.
 			FVector StartLocation = PlayerCamComp->GetComponentLocation();
+
+			// Gets the forward direction from the camera and extends it 400 units outward.
 			FVector Direction = PlayerCamComp->GetForwardVector() * 400.0f;
+
+			// Calculates the spawn location in front of the player.
 			FVector EndLocation = StartLocation + Direction;
+
+			// Sets the starting rotation for the spawned building part.
 			FRotator myRot(0, 0, 0);
 
+			// Removes one of the selected building parts from the player's building inventory.
 			BuildingArray[buildingID] = BuildingArray[buildingID] - 1;
 
+			// Spawns the selected building part in front of the player.
 			spawnedPart = GetWorld()->SpawnActor<ABuildingPart>(BuildPartClass, EndLocation, myRot, SpawnParams);
 
+			// Returns true because the building part was successfully spawned.
 			isSuccess = true;
 		}
-
+		else
+		{
+			// Returns false if the player does not have the selected building part available.
+			isSuccess = false;
+		}
+	}
+	else
+	{
+		// Returns false if the player is already placing a building part.
 		isSuccess = false;
 	}
 }
 
 void APlayerChar::RotateBuilding()
 {
+	// Only rotates the building part while the player is actively placing one.
 	if (isBuilding)
 	{
+		// Rotates the spawned building part 90 degrees around the yaw axis.
 		spawnedPart->AddActorWorldRotation(FRotator(0, 90, 0));
 	}
 }

@@ -7,27 +7,29 @@
 #include "Components/ArrowComponent.h"
 #include "BuildingPart.generated.h"
 
-	UCLASS()
-		class GAM312_MACK_API ABuildingPart : public AActor
-	{
-		GENERATED_BODY()
+UCLASS()
+class GAM312_MACK_API ABuildingPart : public AActor
+{
+	GENERATED_BODY()
 
-	public:
-		// Sets default values for this actor's properties
-		ABuildingPart();
+public:
+	// Sets default values for this actor's properties
+	ABuildingPart();
 
-	protected:
-		// Called when the game starts or when spawned
-		virtual void BeginPlay() override;
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 
-	public:
-		// Called every frame
-		virtual void Tick(float DeltaTime) override;
+public:
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 
-		UPROPERTY(EditAnywhere)
-		UStaticMeshComponent* Mesh;
+	// Mesh component used to display the visual model for the building part.
+	UPROPERTY(EditAnywhere)
+	UStaticMeshComponent* Mesh;
 
-		UPROPERTY(EditAnywhere)
-		UArrowComponent* PivotArrow;
+	// Arrow component used as the root and pivot point for placing/rotating the building part.
+	UPROPERTY(EditAnywhere)
+	UArrowComponent* PivotArrow;
 
 };
