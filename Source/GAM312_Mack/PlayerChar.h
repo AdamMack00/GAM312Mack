@@ -8,6 +8,7 @@
 #include "Resource_M.h"
 #include "Kismet/GameplayStatics.h"
 #include "BuildingPart.h"
+#include "PlayerWidget.h"
 #include "PlayerChar.generated.h"
 
 
@@ -129,6 +130,10 @@ public:
 	// Stores a reference to the building part currently being placed.
 	UPROPERTY()
 	ABuildingPart* spawnedPart;
+
+	// Reference to the player UI widget used to display player stats
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPlayerWidget* playerUI;
 
 	// Updates the player's resources when crafting a building object.
 	UFUNCTION(BlueprintCallable)

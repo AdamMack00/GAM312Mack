@@ -47,6 +47,9 @@ void APlayerChar::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// Updates the UI bars with the player's current health, hunger, and stamina values
+	playerUI->UpdateBars(Health, Hunger, Stamina);
+
 	// Checks if the player is currently placing a building part.
 	if (isBuilding)
 	{
