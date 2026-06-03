@@ -30,6 +30,8 @@ APlayerChar::APlayerChar()
 	ResourcesNameArray.Add(TEXT("Berry"));
 }
 
+
+
 // Called when the game starts or when spawned
 void APlayerChar::BeginPlay()
 {
@@ -40,6 +42,12 @@ void APlayerChar::BeginPlay()
 
 	// Runs DecreaseStats every 2 seconds.
 	GetWorld()->GetTimerManager().SetTimer(StatsTimerHandle, this, &APlayerChar::DecreaseStats, 2.0f, true);
+
+	if (objWidget)
+	{
+		objWidget->UpdatebuildObj(0.0f);
+		objWidget->UpdatematOBJ(0.0f);
+	}
 }
 
 // Called every frame
@@ -175,6 +183,10 @@ void APlayerChar::FindObject()
 					{
 						GiveResource(resourceValue, hitName);
 
+						matsCollected = matsCollected + resourceValue;
+
+						objWidget->UpdatematOBJ(matsCollected);
+
 						// Prints collected message.
 						check(GEngine != nullptr);
 						GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Resource Collected"));
@@ -203,9 +215,9 @@ void APlayerChar::FindObject()
 		// Turns off building mode when the player confirms placement.
 		isBuilding = false;
 
-		//objectsBuilt = objectsBuilt + 1.0f;
+		objectsBuilt = objectsBuilt + 1.0f;
 
-		//objWidget->UpdatebuildObj(objectsBuilt);
+		objWidget->UpdatebuildObj(objectsBuilt);
 	}
 }
 

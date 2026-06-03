@@ -9,6 +9,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "BuildingPart.h"
 #include "PlayerWidget.h"
+#include "ObjectiveWidget.h"
 #include "PlayerChar.generated.h"
 
 
@@ -94,6 +95,15 @@ public:
 	// Decal used when hitting resources.
 	UPROPERTY(EditAnywhere, Category = "HitMarker")
 	UMaterialInterface* hitDecal;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UObjectiveWidget* objWidget;
+
+	UPROPERTY()
+	float objectsBuilt;
+
+	UPROPERTY()
+	float matsCollected;
 
 	// Changes player health.
 	UFUNCTION(BlueprintCallable)
