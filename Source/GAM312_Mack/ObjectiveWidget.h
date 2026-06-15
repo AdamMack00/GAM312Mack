@@ -16,9 +16,11 @@ class GAM312_MACK_API UObjectiveWidget : public UUserWidget
 
 public:
 
+    // Blueprint event used to update the objective UI with the amount of materials collected.
     UFUNCTION(BlueprintImplementableEvent)
     void UpdatematOBJ(float matsCollected);
 
+    // Blueprint event used to update the objective UI with the amount of objects built.
     UFUNCTION(BlueprintImplementableEvent)
     void UpdatebuildObj(float objectsBuilt);
 	

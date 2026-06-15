@@ -96,12 +96,15 @@ public:
 	UPROPERTY(EditAnywhere, Category = "HitMarker")
 	UMaterialInterface* hitDecal;
 
+	// Reference to the objective widget used to update the on-screen objective text.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UObjectiveWidget* objWidget;
 
+	// Tracks how many buildable objects the player has placed.
 	UPROPERTY()
 	float objectsBuilt;
 
+	// Tracks how many materials the player has collected.
 	UPROPERTY()
 	float matsCollected;
 

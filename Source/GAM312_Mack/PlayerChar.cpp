@@ -43,6 +43,7 @@ void APlayerChar::BeginPlay()
 	// Runs DecreaseStats every 2 seconds.
 	GetWorld()->GetTimerManager().SetTimer(StatsTimerHandle, this, &APlayerChar::DecreaseStats, 2.0f, true);
 
+	// Makes sure the objective widget exists before updating the objective UI.
 	if (objWidget)
 	{
 		objWidget->UpdatebuildObj(0.0f);
