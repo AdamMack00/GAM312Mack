@@ -25,6 +25,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// Stores the name of the resource.
 	UPROPERTY(EditAnywhere)
 	FString resourceName = "Wood";
 
@@ -36,12 +37,15 @@ public:
 	UPROPERTY(EditAnywhere)
 	int totalResource = 100;
 
+	// Temporary text used to display resource information.
 	UPROPERTY()
 	FText tempText;
 
+	// Displays the resource name above the resource actor.
 	UPROPERTY(EditAnywhere)
 	UTextRenderComponent* ResourceNameTxt;
 
+	// Mesh used to visually represent the resource.
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* Mesh;
 
